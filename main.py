@@ -60,7 +60,7 @@ if __name__ == '__main__':
     with open(primeslist) as primes:
         primenumbers = primes.read()
 
-    print("Step 1  - Alice generates two primes 1-500")
+    print("Step 1  - Alice generates two primes 500-1000")
     prime1 = int(rd.choice(open("primes.txt").readlines()))
     prime2 = int(rd.choice(open("primes.txt").readlines()))
     print("Prime 1 = ", prime1)
@@ -79,9 +79,12 @@ N = prime1*prime2
 # print("N = ", N)
 
 mult = (prime1-1) * (prime2 -1)
-# print("λ = ", mult)
+lamb = int(mult / gcd(prime1,prime2)[0])
+print("λ = ", lamb)
 
-e = rd.randint(3, mult - 1)
+e = rd.randint(3, lamb - 1)
+while math.gcd(e, lamb) != 1:
+    e = rd.randint(3, lamb - 1)
 
 
 
@@ -100,31 +103,28 @@ e = rd.randint(3, mult - 1)
 
 # print("\nStep 4 - GCD and inverse multiplicative", gcd(prime1, prime2))  
 message = "Secret"
+print("\n_____________________")
+print("Private Key Values")
+print("_____________________")
+print("Prime 1 =", prime1)
+print("Prime 2 =" ,prime2)
+print("Mod Inverse =", k)
 
-
-print("Public Key = ", e)
-print("Private Key = ", k)
+print("\n_____________________")
+print("Public Key Values")
+print("_____________________")
 print("N = ", N)
-print("λ = ", mult)
-print("\n\n")
+print("Public Key = ", e)
+
+print("_____________________")
+
 print("Message = ", message)
 
+
+#Encryption
+
 messageord = [ord(l) for l in message]
-
-
-
-cipher = [pow(l, e, N) for l in messageord]
-print(cipher)
-
-
-messageord = [pow(l, k, N) for l in cipher]
 print(messageord)
-
-
-message = " ".join(chr(l) for l in messageord)
-print(message)
-
-
 
 
 
@@ -168,21 +168,23 @@ N = prime1 × prime2
 characters. Bob encodes each character using the formula */
 
 
-s(i) = int(m(i))e mod N /* MatLab: Use the mod command. Python: Use the %
-command. */
+s(i) = int(m(i))e mod N /* MatLab: Use the mod command. 
+Python: Use the % command. */
+
+
 /* MatLab: use (double(m(i)))e. For example, double(0H0) gives the number 72.
+
+
 Python: Use ‘‘ord" to convert characters to integers. */
 
 
 /* Bob concatenates the encoded characters into a message that is sent to
 Alice. */
 /* Alice receives the message and decodes each character using the formula */
-d(i) =char(s(i)
-k mod N)
+d(i) =char(s(i) k mod N)
 /* MatLab: use ‘‘char" to convert integers to characters. Python: Use
 ‘‘chr" to convert integers to characters, and ’ ’.join() to concatenate
 characters to a string */
 /* Alice concatenates the decoded characters to retrieve the original
 message.
     '''
-
