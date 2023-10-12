@@ -74,8 +74,7 @@ if __name__ == '__main__':
 # # print("\nGCD of",prime1, prime2,)
 # # print("GCD = (prime1 − 1) (prime2 − 1)")
 # print("inverse Multiplicative = ",gcd(prime1,prime2)[0])
-k = gcd(prime1,prime2)[0]
-N = prime1*prime2
+
 # print("N = ", N)
 
 mult = (prime1-1) * (prime2 -1)
@@ -85,8 +84,12 @@ print("λ = ", lamb)
 e = rd.randint(3, lamb - 1)
 while math.gcd(e, lamb) != 1:
     e = rd.randint(3, lamb - 1)
+print("e = ", e)
 
 
+k = gcd(e, lamb)[0]
+print("k = ", k)
+N = prime1*prime2
 
 # print("e = ", e)
 # print(inverse_mod_p(prime1, prime2))
@@ -123,8 +126,28 @@ print("Message = ", message)
 
 #Encryption
 
-messageord = [ord(l) for l in message]
-print(messageord)
+messageord = "".join(str(ord(char))for char in message)
+messageord = int(messageord)
+print("Encrypted = ", messageord)
+
+y = pow(messageord, e) % N
+print(y)
+
+n = pow(y,k) % N
+print(n)
+
+messageord = chr(n)
+print("Decrypted = ", messageord)
+
+# messageord = int(messageord)
+# #y = s ^ e mod N
+# messageord = pow(messageord, e) % N
+# print(messageord)
+# #decryption
+# #compute y ^ k mod N
+# message = pow(messageord, k) % N
+# mmessage = chr(message)
+# print(mmessage)
 
 
 
