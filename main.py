@@ -106,16 +106,14 @@ N = prime1*prime2
 
 # print("\nStep 4 - GCD and inverse multiplicative", gcd(prime1, prime2))  
 message = "Secret"
-print("\n_____________________")
-print("Private Key Values")
 print("_____________________")
+print("Private Key Values")
 print("Prime 1 =", prime1)
 print("Prime 2 =" ,prime2)
 print("Mod Inverse =", k)
 
-print("\n_____________________")
-print("Public Key Values")
 print("_____________________")
+print("Public Key Values")
 print("N = ", N)
 print("Public Key = ", e)
 
@@ -126,12 +124,11 @@ print("Message = ", message)
 
 #Encryption
 
-messageord = "".join(str(ord(char))for char in message)
-messageord = int(messageord)
-print("Encrypted = ", messageord)
+messageord = [ord(l) for l in message]
+for i in messageord:
+    y = pow(i, e) % N
+print("Encrypted = ", y)
 
-y = pow(messageord, e) % N
-print(y)
 
 n = pow(y,k) % N
 print(n)
