@@ -1,32 +1,17 @@
 import math
 import random as rd
 
-
-'''
-find gcd
-m * n = 1
-both numbers have to be co-prime
-
-let a be a positive number and p is inverse mod p, we need
-positive number s satisfying
-as = 1 mod p -> a  = np+1
-as + tp = 1
-as + tp = r
-'''
-
-
+#a and p have to be positive numbers
 def inverse_mod_p(prime1, prime2):
-    r,s = gcd(prime1, prime2)      #a and p have to be positive numbers
-    if r != 1:          # a mod p == r
-        flag = False
+    r,s = gcd(prime1, prime2)     
+    if r != 1:          
+        flag = False 
     else:
         flag = True
     return s, flag
 
 
-
 #function used to find greatest common divisor by solving as+tp=r
-
 def gcd(prime1, prime2):
     oldr, r = (prime1 , prime2 )
     olds, s = (1,0)
@@ -43,168 +28,72 @@ def gcd(prime1, prime2):
     return olds, oldr
 
 
-
-
-#Finding LCM
+#Function to find LCM
 def LCM(prime1, prime2):
     np1 = prime1 - 1
     np2 = prime2 - 1
     return (math.lcm(np1, np2))
 
-
-
 if __name__ == '__main__':
- 
+#Generate two random primes from primes.txt file
     primeslist = "primes.txt"
-
     with open(primeslist) as primes:
         primenumbers = primes.read()
 
-    print("Step 1  - Alice generates two primes 500-1000")
     prime1 = int(rd.choice(open("primes.txt").readlines()))
     prime2 = int(rd.choice(open("primes.txt").readlines()))
-    print("Prime 1 = ", prime1)
-    print("Prime 2 = ", prime2)
-
-# # print("\nStep 2 - LCM of",prime1,"and", prime2)  
-# # print("LCM = (prime1 − 1) (prime2 − 1)")
-# print("LCM = ", LCM(prime1, prime2))  
-
-
-# # print("\nGCD of",prime1, prime2,)
-# # print("GCD = (prime1 − 1) (prime2 − 1)")
-# print("inverse Multiplicative = ",gcd(prime1,prime2)[0])
-
-# print("N = ", N)
-
-mult = (prime1-1) * (prime2 -1)
-lamb = int(mult / gcd(prime1,prime2)[0])
-print("λ = ", lamb)
-
-e = rd.randint(3, lamb - 1)
-while math.gcd(e, lamb) != 1:
-    e = rd.randint(3, lamb - 1)
-print("e = ", e)
-
-
-k = gcd(e, lamb)[0]
-print("k = ", k)
-N = prime1*prime2
-
-# print("e = ", e)
-# print(inverse_mod_p(prime1, prime2))
-
-# # print("λ = (prime1 − 1) (prime2 − 1)/g ")
-# p1 = prime1 -1
-# p2 = prime2 -1
-# m = p1*p2
-# print("λ = ",int(m/gcd(prime1-1,prime2-1)))
-
-
-# print("\nStep 3 - Inverse multiplicative, (T/F)")  
-# print(inverse_mod_p(prime1, prime2))
-
-# print("\nStep 4 - GCD and inverse multiplicative", gcd(prime1, prime2))  
-message = "Secret"
-print("_____________________")
-print("Private Key Values")
-print("Prime 1 =", prime1)
-print("Prime 2 =" ,prime2)
-print("Mod Inverse =", k)
-
-print("_____________________")
-print("Public Key Values")
-print("N = ", N)
-print("Public Key = ", e)
-
-print("_____________________")
-
-print("Message = ", message)
-
-
-#Encryption
-
-messageord = [ord(l) for l in message]
-for i in messageord:
-    y = pow(i, e) % N
-print("Encrypted = ", y)
-
-
-n = pow(y,k) % N
-print(n)
-
-messageord = chr(n)
-print("Decrypted = ", messageord)
-
-# messageord = int(messageord)
-# #y = s ^ e mod N
-# messageord = pow(messageord, e) % N
-# print(messageord)
-# #decryption
-# #compute y ^ k mod N
-# message = pow(messageord, k) % N
-# mmessage = chr(message)
-# print(mmessage)
 
 
 
-'''
-/* The pseudo-code begins below */
-/* Python: we assume the two functions mentioned in Data above are in the
-file Extended Euclidean Algorithm.py */
-/* Python: begin by importing random as rd, and Extended Euclidean Algorithmas ee */
-primeslist = load primes.txt /* Python: Use the commands described earlier in
-this document. */
-
-length primes = length(primeslist)
-Choose random integers p, q from the list {2, · · · , length primes}
-/* Alice selects two random primes next. */
-
-
-1. )      prime1 = primeslist(p) and prime2 = primeslist(q)
-
-2. )  Next task is to find the least common multiple of (prime1 − 1) (prime2 − 1)*/
-
-3.  ) (g, s) =gcd(prime1 − 1, prime2 − 1)
-
-4.  )  λ = (prime1 − 1) (prime2 − 1)/g 
-
-
-/* LCM(a, b) = a b / GCD(a,b) */
-
-
-found =False
-while found is False do
-Choose a random integer e between 3 and λ
-(k, found) =inverse modulo n(e, λ)
-N = prime1 × prime2
-
-
-/* (N, e) is the public key Alice communicates to Bob. k is her private key.
-*/
-
-
-/* Bob selects a message m (through user input) which is a string of
-characters. Bob encodes each character using the formula */
-
-
-s(i) = int(m(i))e mod N /* MatLab: Use the mod command. 
-Python: Use the % command. */
-
-
-/* MatLab: use (double(m(i)))e. For example, double(0H0) gives the number 72.
-
-
-Python: Use ‘‘ord" to convert characters to integers. */
-
-
-/* Bob concatenates the encoded characters into a message that is sent to
-Alice. */
-/* Alice receives the message and decodes each character using the formula */
-d(i) =char(s(i) k mod N)
-/* MatLab: use ‘‘char" to convert integers to characters. Python: Use
-‘‘chr" to convert integers to characters, and ’ ’.join() to concatenate
-characters to a string */
-/* Alice concatenates the decoded characters to retrieve the original
-message.
     '''
+    CALCULATIONS
+    '''
+    mult = (prime1-1) * (prime2 -1)
+    lamb = int(mult / gcd(prime1-1,prime2-1)[1])
+    
+    e = rd.randint(3, lamb)
+    while math.gcd(e, lamb) != 1:
+        e = rd.randint(3, lamb)
+    
+    k = gcd(e, lamb)[0]
+    N = prime1*prime2
+
+    '''
+    CALCULATIONS
+    '''
+
+    message = input("Message to Encrypt = ")
+    print("_____________________")
+    print("Private Key Values")
+    print("Prime 1 = ", prime1)
+    print("Prime 2 = " ,prime2)
+    print("Mod Inverse (k) = ", k)
+
+    print("_____________________")
+    print("Public Key Values")
+    print("N = ", N)
+    print("Public Key (e) = ", e)
+
+    print("_____________________")
+
+    #Encryption
+    original = []
+    messageord = []
+    #Bob encodes each character using the formula s(i) = int(m(i))e mod N
+    for char in message:
+        messageord1= ord(char)
+        original.append(messageord1)
+        y = pow(messageord1, e) % N
+        messageord.append(y)
+    print("Original Message: ", original)
+    print("Encoded Message: ", messageord)
+
+    #Decryption
+    #Alice receives the message and decodes each character using the formula 
+    #d(i) = char(s(i)k mod N)
+
+    print("\nMessage Decrypted")
+    for i in messageord:
+        n = pow(i,k) % N        
+        print(chr(n), end="")
+
