@@ -18,26 +18,35 @@ class ecc(object):
         self.x = x
         self.y = y
 
-    
     def display_field(self):
         print('x = ', self.x, 'y = ', self.y)
 
-
+'''
+Algo To find Elliptic Curve Roots
+'''
 #ellipitic curve result y^2 = x^3 + ax + b mod p
 def generate(a,b,p):
-    i = p-1
-    fieldlist = []
-    fieldlist.append((0,0))
-    print(fieldlist)
-    length_list = 1
-    # y = pow(i,2)%p
-    # math2 = pow(x,3)+(a*x)+b%p
-    for x in range(p-1):
-        for i in range(p-1):
-            if (pow(i,2)%p == pow(x,3)+(a*x)+b%p):
+    temp = []
+    length_list = 0
+    for x in range(p):
+        for i in range(p):
+            if (pow(i,2))%p == ((pow(x,3))+(a*x)+b)%p:
                 length_list += 1
-                fieldlist.append((x,i))
-    print(fieldlist, length_list)
+                temp.append((x,i))
+    print(temp[::2])
+
+
+    # if (i[-1]) == 0:
+    #     fieldlist.append((x,i))
+    # else:
+    #     fieldlist.append(temp[::2])
+    # print(fieldlist)
+    # fieldlist.append(temp[::2])
+    # print("Field List: ", fieldlist,"\nLength List: ", length_list)
+
+'''
+END
+'''
 
 # def add_fields():
 #     P1 = (x1,y1)
@@ -78,13 +87,16 @@ if __name__ == "__main__":
     # x=int(input("X = : "))
     # y=int(input("Y = : "))
     # EllipticCurveRoots(x,y,40,60,80)
-    p = int(rd.choice(open("primes.txt").readlines()))
+    p = 7
     # x1 = rd.randint(0, 9)
     # x2 = rd.randint(0, 9)
     # y1 = rd.randint(0, 9)
     # y2 = rd.randint(0, 9)
-    myObj = ecc(0,9)
-    generate(myObj.x, myObj.y,p)
+
+    #ellipitic curve result y^2 = x^3 + ax + b mod p
+
+    myObj = ecc(2,2)
+    generate(-3,5,19)
 
 
 
