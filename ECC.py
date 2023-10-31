@@ -35,10 +35,12 @@ def generate(a,b,p):
                 temp.append((x,i))
     # print("Roots: ",temp,"\nLength List: ", length_list)
     FieldList = []
+    x,y = zip(*temp)
     for i in temp:
-        if temp[1] == 0:
-            FieldList.append((x,i))
-            print(FieldList)
+        if y == 0:
+            FieldList.append((x,y))
+    print(FieldList)
+    
 
 
     # if (i[-1]) == 0:
