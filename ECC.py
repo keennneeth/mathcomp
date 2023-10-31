@@ -33,8 +33,12 @@ def generate(a,b,p):
             if (pow(i,2))%p == ((pow(x,3))+(a*x)+b)%p:
                 length_list += 1
                 temp.append((x,i))
-    fieldlist = [y for x,y in temp]
-    print(fieldlist)
+    # print("Roots: ",temp,"\nLength List: ", length_list)
+    FieldList = []
+    for i in temp:
+        if temp[1] == 0:
+            FieldList.append((x,i))
+            print(FieldList)
 
 
     # if (i[-1]) == 0:
