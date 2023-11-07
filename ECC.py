@@ -35,7 +35,7 @@ def generate(a,b,p):
                 length_list += 1
                 temp.append((x,i))
     print("Field List: ", temp,"\nRoots: ", length_list)
-    P, Q = (5274, 2841) , (8669, 740)
+    P, Q = (rd.sample(temp, 2))
     print("P1 :", P,"\nP2 :",Q)
     X1 = P[0]
     Y1 = P[1]
@@ -95,6 +95,9 @@ def add_fields(X1, X2, Y1, Y2, P, Q, a, b, p):
 
     print("New X:", X3, "New Y:",Y3)
 
+    scalarproduct(X1, X2, Y1, Y2, P, Q, a, b, p)
+
+
 '''
 END OF N + P
 '''
@@ -106,30 +109,24 @@ END OF N + P
 '''
 algo for nxP
 '''
-# def scalarproduct(e):
-#     e = bin(e)[2:]      #turning into binary number
-#     print(e)
-    # for i in range(L-1):
-    #     R = m
-    #     y = inf
-    #     if ai != 0:
-    #         y = add_fields(y,R)
-    #     R = add_fields(R,R)
-    # return y
-
+def scalarproduct(X1, X2, Y1, Y2, P, Q, a, b, p):
+    message = "Test"
+    original = []
+    afterbinary = []
+    for char in message:
+        messageord1= ord(char)
+        original.append(messageord1)
+        e = bin(messageord1)[2:]      #turning into binary number
+        print(e)
+        afterbinary.append(e)
+    print("Original Message: ", original)
+    print("Encoded Message: ", afterbinary)
+            
+    
 if __name__ == "__main__":
-    # x=int(input("X = : "))
-    # y=int(input("Y = : "))
-    # EllipticCurveRoots(x,y,40,60,80)
-    p = 7
-    # x1 = rd.randint(0, 9)
-    # x2 = rd.randint(0, 9)
-    # y1 = rd.randint(0, 9)
-    # y2 = rd.randint(0, 9)
-
     #ellipitic curve result y^2 = x^3 + ax + b mod p
     # A // B // P
-    generate(497, 1768, 9739)
+    generate(3, 8, 7)
 
 
 
