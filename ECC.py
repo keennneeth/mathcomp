@@ -93,7 +93,7 @@ def add_fields(X1, X2, Y1, Y2, P, Q, a, b, p):
     X3 = (pow(slope, 2) - X1 - X2) % p
     Y3 = (slope * (X1 - X3) - Y1) % p
 
-    print("New X:", X3, "New Y:",Y3)
+    print("New Point ", X3,",", Y3)
 
     scalarproduct(X1, X2, Y1, Y2, P, Q, a, b, p)
 
@@ -110,19 +110,23 @@ END OF N + P
 algo for nxP
 '''
 def scalarproduct(X1, X2, Y1, Y2, P, Q, a, b, p):
-    message = "Test"
-    original = []
-    afterbinary = []
-    for char in message:
-        messageord1= ord(char)
-        original.append(messageord1)
-        e = bin(messageord1)[2:]      #turning into binary number
-        print(e)
-        afterbinary.append(e)
-    print("Original Message: ", original)
-    print("Encoded Message: ", afterbinary)
-            
+    m = "Test"
+    L = 25
+    num = rd.randint(1, 50)
+    e = bin(num)[2:]      #turning into binary number
+    print("Random e for this encryption -",e)
     
+    # for i in range(0, L-1):
+    #     R = m
+    #     y = 0
+    #     if a != 0:
+    #         y = add_fields(y, R)
+    #     R = add_fields(R, R)
+    # print("Scalar Product -",y)
+
+
+
+
 if __name__ == "__main__":
     #ellipitic curve result y^2 = x^3 + ax + b mod p
     # A // B // P
