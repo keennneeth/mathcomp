@@ -1,99 +1,137 @@
-import math
 import random as rd
+import math
 
-#a and p have to be positive numbers
-def inverse_mod_p(prime1, prime2):
-    r,s = gcd(prime1, prime2)     
-    if r != 1:          
-        flag = False 
+'''
+Need large prime - p
+Elliptic curve - E
+point - P
+^solution to the elliptic curve equation modulo p
+'''
+
+
+
+'''
+FINDING N + P
+'''
+class ecc(object):
+    def __init__(self, x,y):
+        self.x = x
+        self.y = y
+
+    def display_field(self):
+        print('x = ', self.x, 'y = ', self.y)
+
+
+'''
+Algo To find Elliptic Curve Roots
+'''
+#ellipitic curve result y^2 = x^3 + ax + b mod p
+def generate(a,b,p):
+    temp = []
+    length_list = 0
+    for x in range(p):
+        for i in range(p):
+            if (pow(i,2))%p == ((pow(x,3))+(a*x)+b)%p:
+                length_list += 1
+                temp.append((x,i))
+    print("Field List: ", temp,"\nRoots: ", length_list)
+    # P, Q = (rd.sample(temp, 2))
+    P,Q = (3,4),  (5,1)
+    print("P1 :", P,"\nP2 :",Q)
+
+    return P, Q, temp
+
+def add_fields(a,p):
+
+    X1 = P[0]
+    Y1 = P[1]
+
+    X2 = Q[0]
+    Y2 = Q[1]
+    
+    if X2 - X1 == 0:
+            print("Division by 0 // CANNOT CONTINUE")
+            exit()
+ 
+    #Rule 1 - if P1 ̸= P2 and x1 = x2, then P1 ⊕ P2 = O
+    if P != Q and X1 == X2:
+        print("R1 - Elliptic Curve Addition: O - Infinite")
+
+    #Rule 2 - If P1 = P2 and y1 = 0, then P1 ⊕ P2 = 2P1 = O
+    elif P == Q and Y1 == 0:
+        print("R2 - Elliptic Curve Addition: O - Infinite")
+
+
+    #Rule 3 - If P1 ̸= P2 (and x1 ̸= x2), let λ and ν = x
+    elif P != Q:
+        slope = ((Y2 - Y1) * pow(X2 - X1, -1, p)) % p
+
+
     else:
-        flag = True
-    return s, flag
+        slope = ((pow(X1, 3) + a) * pow(2 * Y1, -1, p)) % p
+
+    X3 = (pow(slope, 2) - X1 - X2) % p
+    Y3 = (slope * (X1 - X3) - Y1) % p
+    base = (X3, Y3)
+    print("Elliptic Curve Addition Rules =",base)
+
+     
+    return base
+
+'''
+END OF N + P
+'''
+def nXp(m,e,temp):
+    L = 25
+    ordmsg = []
+    for i in m:
+        ordmsg1 = ord(i)
+        ordmsg.append(ordmsg1)
+    print(ordmsg)
 
 
-#function used to find greatest common divisor by solving as+tp=r
-def gcd(prime1, prime2):
-    oldr, r = (prime1 , prime2 )
-    olds, s = (1,0)
-    oldt, t = (0,1)
+    # for i in range(0, L-1):
+    #     R = 
+    #     y = (0,0)
+    #     if i != 0:
+    #         y = add_fields(y,R)
+    #     else:
+    #         R = add_fields(R,R)
+    # print(y)
 
-    while r != 0:
-        q = math.floor(oldr//r)
-        oldr, r = r, oldr - q * r
-        olds, s = s, olds - q * s
-        oldt, t = t, oldt - q * t
+
+
+
+
+
+
+
+'''
+algo for nxP
+P being the Base in add_fields
+'''
+
+
+
    
-    if olds < 0:
-        olds = olds + prime2
-    return olds, oldr
+
+if __name__ == "__main__":
+    #ellipitic curve result y^2 = x^3 + ax + b mod p
+    # A // B // P
+    num = 10
+    e = bin(num)[2:]
+    m = "testing"
 
 
-#Function to find LCM
-def LCM(prime1, prime2):
-    np1 = prime1 - 1
-    np2 = prime2 - 1
-    return (math.lcm(np1, np2))
+    P, Q, temp = generate(3,8,100)
+    #a, b, p
+    base = add_fields(3,7)
 
-if __name__ == '__main__':
-#Generate two random primes from primes.txt file
-    primeslist = "primes.txt"
-    with open(primeslist) as primes:
-        primenumbers = primes.read()
-
-    prime1 = int(rd.choice(open("primes.txt").readlines()))
-    prime2 = int(rd.choice(open("primes.txt").readlines()))
-
-
+    ntimesp = nXp(m,e,temp)
 
     '''
-    CALCULATIONS
+    Alice and Bob agree on a large prime p, 
+    an elliptic curve E, 
+    and a point P which is a solution
+    to the elliptic curve equation modulo p.
     '''
-    mult = (prime1-1) * (prime2 -1)
-    lamb = int(mult / gcd(prime1-1,prime2-1)[1])
-    
-    e = rd.randint(3, lamb)
-    while math.gcd(e, lamb) != 1:
-        e = rd.randint(3, lamb)
-    
-    k = gcd(e, lamb)[0]
-    N = prime1*prime2
-
-    '''
-    CALCULATIONS
-    '''
-
-    message = input("Message to Encrypt = ")
-    print("_____________________")
-    print("Private Key Values")
-    print("Prime 1 = ", prime1)
-    print("Prime 2 = " ,prime2)
-    print("Mod Inverse (k) = ", k)
-
-    print("_____________________")
-    print("Public Key Values")
-    print("N = ", N)
-    print("Public Key (e) = ", e)
-
-    print("_____________________")
-
-    #Encryption
-    original = []
-    messageord = []
-    #Bob encodes each character using the formula s(i) = int(m(i))e mod N
-    for char in message:
-        messageord1= ord(char)
-        original.append(messageord1)
-        y = pow(messageord1, e) % N
-        messageord.append(y)
-    print("Original Message: ", original)
-    print("Encoded Message: ", messageord)
-
-    #Decryption
-    #Alice receives the message and decodes each character using the formula 
-    #d(i) = char(s(i)k mod N)
-
-    print("\nMessage Decrypted")
-    for i in messageord:
-        n = pow(i,k) % N        
-        print(chr(n), end="")
-
