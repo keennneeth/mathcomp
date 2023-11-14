@@ -18,7 +18,7 @@ def generate(a, b, p, ordval):
                 length_list += 1
                 temp.append((x, i))
     print("Field List: ", temp, "\nRoots: ", length_list)
-    P, Q = (5274,2841), (8669,740)
+    P, Q = (3,4), (5,1)
     print("P1 :", P, "\nP2 :", Q)
     for i in ordval:
         print([i], temp[i])
@@ -76,14 +76,17 @@ if __name__ == "__main__":
     e = bin(num)[2:]
     m = "testing"
     ordval = ordmsg(m)
-    P, Q, temp = generate(3, 8, 100, ordval)
+    a = 3
+    b = 8
+    p = 7
+    P, Q, temp = generate(a,b,100, ordval)
+    
+    Pmult = 5
+    Qmult = 2
 
-    Pmult = 25
-    Qmult = 34
-
-    base = add_fields(P, Q, 497, 1768, 9739)
-    result_5P = nXp(P, Pmult, 497, 1768, 9739)
-    result_2Q = nXp(Q, Qmult, 497, 1768, 9739)
+    base = add_fields(P, Q, a,b,p)
+    result_5P = nXp(P, Pmult, a,b,p)
+    result_2Q = nXp(Q, Qmult, a,b,p)
 
     print(Pmult,"P",result_5P)
     print(Qmult,"Q",result_2Q)
