@@ -9,7 +9,7 @@ class ecc(object):
     def display_field(self):
         print('x = ', self.x, 'y = ', self.y)
 
-def generate(a, b, p, ordval):
+def generate(a, b, p, ordval,m):
     temp = []
     length_list = 0
     for x in range(p):
@@ -19,9 +19,9 @@ def generate(a, b, p, ordval):
                 temp.append((x, i))
     print("Field List: ", temp, "\nRoots: ", length_list)
     P, Q = (3,4), (5,1)
+    # P, Q = (rd.sample(temp, 2))
     print("P1 :", P, "\nP2 :", Q)
-    for i in ordval:
-        print([i], temp[i])
+    
 
     return P, Q, temp
 
@@ -40,13 +40,16 @@ def add_fields(P, Q, a, b, p):
         else:
             slope = ((3 * X1**2 + a) * pow(2 * Y1, -1, p)) % p
     else:
-        # Slope calculation for different points
         slope = ((Y2 - Y1) * pow(X2 - X1, -1, p)) % p
+
 
     X3 = (pow(slope, 2) - X1 - X2) % p
     Y3 = (slope * (X1 - X3) - Y1) % p
     base = (X3, Y3)
     return base
+
+
+
 
 def double_point(P, a, p):
     if P == (0,0):
@@ -54,15 +57,23 @@ def double_point(P, a, p):
     else:
         return add_fields(P, P, a, 0, p)
 
+
+
+
 def nXp(m, e, a, b, p):
+    R = m
     y = (0,0)
     binary = bin(e)[2:]
     for bit in binary:
         y = double_point(y, a, p)
         if bit != '0':
             y = add_fields(y, m, a, b, p)
+        R = add_fields(R, m, a, b, p)
 
     return y
+
+
+
 
 def ordmsg(m):
     ordmsg = []
@@ -71,15 +82,33 @@ def ordmsg(m):
         ordmsg.append(ordmsg1)
     return ordmsg
 
+
+
+
+
+def ECC(base, ordval,temp):
+    # nA = rd.choice(50)
+    print("Message -",m)
+
+    print("\n--------")
+    for i in ordval:
+        EncodedM = ([i], temp[i])
+        print([i], temp[i])
+    print("\n--------")
+
+
+
+
+
+
 if __name__ == "__main__":
-    num = 10
-    e = bin(num)[2:]
+    e = 10
     m = "testing"
     ordval = ordmsg(m)
     a = 3
     b = 8
     p = 7
-    P, Q, temp = generate(a,b,100, ordval)
+    P, Q, temp= generate(a,b,100, ordval,m)
     
     Pmult = 5
     Qmult = 2
@@ -87,6 +116,9 @@ if __name__ == "__main__":
     base = add_fields(P, Q, a,b,p)
     result_5P = nXp(P, Pmult, a,b,p)
     result_2Q = nXp(Q, Qmult, a,b,p)
+
+    test = ECC(base, ordval, temp)
+
 
     print(Pmult,"P",result_5P)
     print(Qmult,"Q",result_2Q)
