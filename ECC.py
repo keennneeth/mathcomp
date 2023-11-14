@@ -91,10 +91,13 @@ def ECC(base, ordval,temp):
     print("Message -",m)
 
     print("\n--------")
+    EncodedM = []
+
     for i in ordval:
-        EncodedM = ([i], temp[i])
-        print([i], temp[i])
-    print("\n--------")
+        EncodedM.append(temp[i])
+    print("Encoded Message - ",EncodedM)
+
+
 
 
 
