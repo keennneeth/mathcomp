@@ -86,7 +86,6 @@ def calculate_c2(M, k, QA, a, b, p):
     return c2
 
 def negate(point, p):
-    # Negate the y-coordinate of the point in the finite field
     x, y = point
     negated_point = (x, (-y) % p)
     return negated_point
@@ -155,22 +154,17 @@ def mainstuff(P, a, b, p, EncodedM):
 
 
     decrypted = []
-    for point in c2:
-        decrypted_point = add_fields(point, negate(nAc1, p), a, b, p)
+    for root in c2:
+        decrypted_point = add_fields(root, negate(nAc1, p), a, b, p)
         decrypted.append(decrypted_point)
     print("Decrypted Values = ", decrypted)
 
-    # Find the indices of the decrypted points in the fieldlist
-    indices = [fieldlist.index(point) for point in decrypted]
 
-    # Print the ASCII values corresponding to the indices
-    ascii_values = [point[0] for point in fieldlist]
-    decrypted_ascii = [ascii_values[index] for index in indices]
-
-    print("Indices of points in fieldlist:", indices)
+    indexmatch = [fieldlist.index(point) for point in decrypted]
+    print("Corresponding Index:", indexmatch)
 
     decrypyedmsg = []
-    for i in indices:
+    for i in indexmatch:
         decrypyedmsg.append(chr(i))
     print(decrypyedmsg)
 
