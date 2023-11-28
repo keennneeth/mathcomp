@@ -9,71 +9,54 @@ class ecc(object):
     def display_field(self):
         print('x = ', self.x, 'y = ', self.y)
 
-def generate(a, b, p, ordval,m):
-    temp = []
-    length_list = 0
+def generate(a, b, p, ordval,m):        #Algo #1, Finding Roots
+    fieldlist = []       #create array for roots 
+    length_list = 0 #initialize roots as 0
     for x in range(p):
         for i in range(p):
-            if (pow(i, 2)) % p == ((pow(x, 3)) + (a * x) + b) % p:
+            if (pow(i, 2)) % p == ((pow(x, 3)) + (a * x) + b) % p:  #Pseudo Code math
                 length_list += 1
-                temp.append((x, i))
-    print("Field List: ", temp, "\nRoots: ", length_list)
-    P, Q = (3,4), (5,1)
-    # P, Q = (rd.sample(temp, 2))
-    print("P1 :", P, "\nP2 :", Q)
-    
+                fieldlist.append((x, i))
+    print("Field List: ", fieldlist, "\nRoots: ", length_list)
+    return fieldlist, length_list
 
-    return P, Q, temp
+# fieldlist is the list of roots
 
-def add_fields(P, Q, a, b, p):
+
+def add_fields(P, Q, a, b, p):      #Algprithm to compute P + Q (Addition)
     X1, Y1 = P
     X2, Y2 = Q
 
-    if P == (0,0):
+    if P == (0, 0):
         return Q
-    if Q == (0,0):
+    if Q == (0, 0):
         return P
 
     if X1 == X2:
         if (Y1 + Y2) % p == 0:
-            return (0,0)
+            return (0, 0)
         else:
             slope = ((3 * X1**2 + a) * pow(2 * Y1, -1, p)) % p
     else:
+        if (X2 - X1) % p == 0:
+            return (0, 0)
         slope = ((Y2 - Y1) * pow(X2 - X1, -1, p)) % p
 
-
-    X3 = (pow(slope, 2) - X1 - X2) % p
-    Y3 = (slope * (X1 - X3) - Y1) % p
+    X3 = (pow(slope, 2) - X1 - X2) 
+    Y3 = (slope * (X1 - X3) - Y1) 
     base = (X3, Y3)
     return base
 
 
-
-
-def double_point(P, a, p):
-    if P == (0,0):
-        return P
-    else:
-        return add_fields(P, P, a, 0, p)
-
-
-
-
-def nXp(m, e, a, b, p):
+def nXp(m, e, a, b, p):     #Algorithm to compute nXP
     R = m
     y = (0,0)
     binary = bin(e)[2:]
     for bit in binary:
-        y = double_point(y, a, p)
         if bit != '0':
             y = add_fields(y, m, a, b, p)
         R = add_fields(R, m, a, b, p)
-
     return y
-
-
-
 
 def ordmsg(m):
     ordmsg = []
@@ -82,19 +65,36 @@ def ordmsg(m):
         ordmsg.append(ordmsg1)
     return ordmsg
 
+#ord val ^ is ord val to ec roots
+#fieldlist is all the roots
 
-
-
-
-def ECC(base, ordval,temp):
+def ECC(base, ordval,fieldlist):
     # nA = rd.choice(50)
     print("Message -",m)
     print("\n--------")
     EncodedM = []
     for i in ordval:
-        EncodedM.append(temp[i])
+        print(i)
+        EncodedM.append(fieldlist[i])
     return EncodedM
 
+
+# def decrypt(c2, fieldlist, EncodedM, m, P, a, b, p, ordval):
+#     original_message = m
+#     e = rd.choice(range(150, 200))
+#     while c2 != EncodedM:
+#         e = rd.choice(range(150, 200))
+#         c2 = mainstuff(P, e, a, b, p, ordval, EncodedM)
+#Just in case the decryption is encorrect, it will reset and try again.
+
+
+    print("decrypt c2 - ", c2)
+
+    c = [fieldlist.index(x) for x in c2 if x in c2 and x in fieldlist]
+    print(c)
+    decryptedmessage = ''.join(chr(num) for num in c)
+
+    print(decryptedmessage)
 
 '''
 (1) Alice and Bob agree on a large prime p, an elliptic curve E, and a point P which is a solution
@@ -111,8 +111,15 @@ c2 = M + k QA. Bob sends (c1, c2) to Alice.
 '''
 def mainstuff(P, e, a, b, p, ordval, EncodedM):
 
-    nA = rd.choice(range(0,100))
-    nB = rd.choice(range(0,100))
+    # nA = rd.choice(range(0,100))
+    # nB = rd.choice(range(0,100))
+    nA = 5
+    nB = 7
+
+
+    '''
+    P  = 3,4
+    '''
    
     QA = nXp(P, nA, a,b,p)
     QB = nXp(P, nB, a,b,p)
@@ -131,40 +138,41 @@ def mainstuff(P, e, a, b, p, ordval, EncodedM):
     print("Bob's random ephemeral key e -", e)
     print("Bob computes c1 (eP) -", c1)
 
-    c2 = []
-    for i in EncodedM:
-        c2.append(add_fields(i, c1, a,b,p))
-    print("c2 - ", c2)
-
-    print("Alice recieves the 2 quantites", c1, "and", c2)
+    # print("Alice recieves the 2 quantites", c1, "and", c2)
 
     nAc1 = nXp(c1, nA, a,b,p)
     print("Alice computes nAc1 -", nAc1)
+    c2 = [add_fields(m, nXp(QA, e, a, b, p), a, b, p) for m in EncodedM]
+
+    return c2
 
 
-    c2_m_nAc1 = []
-    for i in c2:
-        c2_m_nAc1.append(i[0] - nAc1[0])
-    print("Alice decrypts the message using c2 - nAc1", c2_m_nAc1)
-
-
-
-
-
-
+    # c2_m_nAc1 = []
+    # for i in c2:
+    #     c2_m_nAc1.append((i[0] - nAc1[0], i[1] - nAc1[1]))
+    # print("Alice decrypts the message using c2 - nAc1", c2_m_nAc1)
 
 
 
+    # # Step 7: Alice decrypts the message by computing c2 - nA * c1
+    # nAc1 = nXp(c1, nA, a, b, p)
+    # decrypted_message = [add_fields(m, nAc1, a, b, p) for m in c2]
+    # print("Testing - ", decrypted_message)
 
 if __name__ == "__main__":
-    e = rd.choice(range(0,20))
-    m = "testing"
+    # e = rd.choice(range(0,20))
+   
+    e = 32
+    m = "Hello World"
     ordval = ordmsg(m)
     a = 3
     b = 8
     p = 7
-    P, Q, temp= generate(a,b,100, ordval,m)
-    
+
+    fieldlist, length_list= generate(a,b,200, ordval,m)
+    P, Q = (3,4), (5,1)
+    #P, Q = (rd.sample(fieldlist, 2))
+
     Pmult = 5
     Qmult = 2
 
@@ -172,11 +180,11 @@ if __name__ == "__main__":
     result_5P = nXp(P, Pmult, a,b,p)
     result_2Q = nXp(Q, Qmult, a,b,p)
 
-    EncodedM = ECC(base, ordval, temp)
+    EncodedM = ECC(base, ordval, fieldlist)
 
-    main = mainstuff(P, e, a, b, p, ordval, EncodedM)
+    c2 = mainstuff(P, e, a, b, p, ordval, EncodedM)
 
-
+    # origmessage = decrypt(c2, fieldlist, EncodedM, m, P, a, b, p, ordval)
     # print(Pmult,"P",result_5P)
     # print(Qmult,"Q",result_2Q)
     # print("Elliptic Curve Addition - ", base)
